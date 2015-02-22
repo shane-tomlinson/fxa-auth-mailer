@@ -157,5 +157,71 @@ module.exports = function (log) {
     return this.send(email)
   }
 
+  Mailer.prototype.passwordChangedEmail = function (message) {
+    log.trace({ op: 'mailer.passwordChangedEmail', email: message.email, uid: message.uid })
+    var translator = this.translator(message.acceptLanguage)
+    var values = {
+      translator: translator,
+      email: message.email,
+      encodedEmail: encodeURIComponent(message.email)
+    }
+    var localized = this.templates.passwordChangedEmail(values)
+    var email = {
+      sender: this.sender,
+      to: message.email,
+      subject: translator.gettext('Your Firefox Account password has been changed'),
+      text: localized.text,
+      html: localized.html,
+      headers: {
+        'Content-Language': translator.language
+      }
+    }
+    return this.send(email)
+  }
+
+  Mailer.prototype.passwordResetEmail = function (message) {
+    log.trace({ op: 'mailer.passwordiResetEmail', email: message.email, uid: message.uid })
+    var translator = this.translator(message.acceptLanguage)
+    var values = {
+      translator: translator,
+      email: message.email,
+      encodedEmail: encodeURIComponent(message.email)
+    }
+    var localized = this.templates.passwordResetEmail(values)
+    var email = {
+      sender: this.sender,
+      to: message.email,
+      subject: translator.gettext('Your Firefox Account password has been reset'),
+      text: localized.text,
+      html: localized.html,
+      headers: {
+        'Content-Language': translator.language
+      }
+    }
+    return this.send(email)
+  }
+
+  Mailer.prototype.newSyncDeviceEmail = function (message) {
+    log.trace({ op: 'mailer.newSyncDeviceEmail', email: message.email, uid: message.uid })
+    var translator = this.translator(message.acceptLanguage)
+    var values = {
+      translator: translator,
+      email: message.email,
+      encodedEmail: encodeURIComponent(message.email)
+    }
+    var localized = this.templates.newSyncDeviceEmail(values)
+    var email = {
+      sender: this.sender,
+      to: message.email,
+      subject: translator.gettext('A new device is now syncing to your Firefox Account'),
+      text: localized.text,
+      html: localized.html,
+      headers: {
+        'Content-Language': translator.language
+      }
+    }
+    return this.send(email)
+  }
+
   return Mailer
 }
